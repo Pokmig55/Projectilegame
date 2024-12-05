@@ -60,26 +60,23 @@ function updateProjectile() {
     projectile.x = 100 + projectile.dx * time;
     projectile.y = 500 - (projectile.dy * time - 0.5 * gravity * time ** 2);
 
-    // Check if projectile hits the ground or goes off-screen
-    if (projectile.y > canvas.height || projectile.x > canvas.width) {
+    // Check if projectile hits the target
+    const dist = Math.sqrt((projectile.x - target.x) ** 2 + (projectile.y - target.y) ** 2);
+    if (dist <= target.radius) {
       projectile.active = false;
-      checkScore();
+      alert("You hit the target! +10 points!");
+      score += 10;
+      resetGame();
+      return;
+    }
+
+    // Check if projectile hits the ground
+    if (projectile.y >= canvas.height) {
+      projectile.active = false;
+      alert("You missed! Try again.");
+      resetGame();
     }
   }
-}
-
-function checkScore() {
-  const dist = Math.sqrt((projectile.x - target.x) ** 2 + (projectile.y - target.y) ** 2);
-  if (dist < target.radius) {
-    alert("Direct hit! +10 points!");
-    score += 10;
-  } else if (dist < 50) {
-    alert("Close! +5 points!");
-    score += 5;
-  } else {
-    alert("Miss! Try again.");
-  }
-  resetGame();
 }
 
 function resetGame() {
@@ -87,9 +84,12 @@ function resetGame() {
   projectile.y = 500;
   projectile.active = false;
   time = 0;
-  target.x = Math.random() * 400 + 300;
-  speed = Math.random() * 30 + 50;
-  rangeDisplay.textContent = `300 to 700`;
+  target.x = Math.random() * 400 + 300; // Reposition target
+  speed = Math.random() * 30 + 50; // Reset speed
+
+  // Display the correct horizontal distance between cannon and target
+  const distance = Math.abs(target.x - projectile.x).toFixed(2);
+  rangeDisplay.textContent = `Distance: ${distance} m`;
   speedDisplay.textContent = speed.toFixed(1);
   scoreDisplay.textContent = score;
 }
@@ -123,7 +123,8 @@ function gameLoop() {
 fireButton.addEventListener("click", fireProjectile);
 
 // Initialize game
-rangeDisplay.textContent = `300 to 700`;
+const initialDistance = Math.abs(target.x - projectile.x).toFixed(2);
+rangeDisplay.textContent = `Distance: ${initialDistance} m`;
 speedDisplay.textContent = speed.toFixed(1);
 scoreDisplay.textContent = score;
 gameLoop();
