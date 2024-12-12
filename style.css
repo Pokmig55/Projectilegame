@@ -1,9 +1,8 @@
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
   background: linear-gradient(to bottom, #87ceeb, #f0e68c); /* Sky to ground */
   margin: 0;
-  padding: 0;
+  text-align: center;
 }
 
 .game-container {
@@ -18,7 +17,7 @@ canvas {
   background: transparent;
 }
 
-.controls, .info {
+.controls {
   margin-top: 10px;
 }
 
@@ -34,6 +33,6 @@ button:hover {
   color: white;
 }
 
-.info p {
-  margin: 5px 0;
+.info {
+  margin-top: 10px;
 }
